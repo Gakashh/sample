@@ -1,0 +1,48 @@
+[
+  {
+    "id": 1,
+    "name": "Alice",
+    "age": 25,
+    "city": "New York"
+  },
+  {
+    "id": 2,
+    "name": "Bob",
+    "age": 30,
+    "city": "Los Angeles"
+  },
+  {
+    "id": 3,
+    "name": "Charlie",
+    "age": 28,
+    "city": "Chicago"
+  }
+]
+
+
+from pyspark.sql import SparkSession
+import os
+
+# Check if the file exists and print its content for diagnosis
+file_path = "stud.json"
+if os.path.exists(file_path):
+    print(f"Content of {file_path}:")
+    with open(file_path, 'r') as f:
+        print(f.read())
+else:
+    print(f"File '{file_path}' not found.")
+
+
+# Create Spark session
+spark = SparkSession.builder \
+    .appName("ReadJSONExample") \
+    .getOrCreate()
+
+# Read JSON file with multiLine option
+df = spark.read.option("multiLine", "true").json(file_path)
+
+# Show DataFrame
+df.show()
+
+# Print schema
+df.printSchema()
